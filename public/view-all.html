@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>📦 All Tracking Entries</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f4f6f8;
+      padding: 20px;
+      margin: 0;
+    }
+
+    h2 {
+      text-align: center;
+      color: #333;
+      margin-bottom: 16px;
+    }
+
+    #search {
+      display: block;
+      margin: 0 auto 24px;
+      padding: 10px;
+      width: 90%;
+      max-width: 400px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      font-size: 16px;
+    }
+
+    .entry {
+      background-color: #fff;
+      border-left: 5px solid #1976d2;
+      padding: 15px 20px;
+      margin-bottom: 16px;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+    }
+
+    .entry h3 {
+      margin: 0 0 10px;
+      color: #1976d2;
+    }
+
+    .history-item {
+      padding-left: 10px;
+      margin-bottom: 10px;
+      border-left: 3px solid #eee;
+      padding-left: 10px;
+    }
+
+    .status-tag {
+      display: inline-block;
+      padding: 4px 8px;
+      border-radius: 12px;
+      font-size: 13px;
+      font-weight: bold;
+      margin-bottom: 4px;
+      text-transform: uppercase;
+    }
+
+    .Delivered {
+      background-color: #c8e6c9;
+      color: #2e7d32;
+    }
+
+    .Transit, .InTransit {
+      background-color: #bbdefb;
+      color: #1565c0;
+    }
+
+    .Pending {
+      background-color: #ffe0b2;
+      color: #e65100;
+    }
+
+    .Unknown {
+      background-color: #e0e0e0;
+      color: #616161;
+    }
+
+    .location {
+      font-size: 14px;
+      color: #444;
+    }
+
+    .timestamp {
+      font-size: 12px;
+      color: #888;
+    }
+
+    .error {
+      color: red;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <h2>📦 All Tracking Entries</h2>
+
+  <input type="text" id="search" placeholder="🔍 Filter by tracking number..." />
+
+  <div id="entries"></div>
+  <p id="error" class="error"></p>
+
+  <script>
+    let allEntries = [];
+
+    function createStatusTag(status) {
+      const span = document.createElement('span');
+      span.className = `status-tag ${status.replace(/\s+/g, '') || 'Unknown'}`;
+      span.textContent = status || 'Unknown';
+      return span;
+    }
+
+    function renderEntries(filterText = '') {
+      const container = document.getElementById('entries');
+      container.innerHTML = '';
+
+      const filtered = allEntries.filter(entry =>
+        entry.trackingNumber.toLowerCase().includes(filterText.toLowerCase())
+      );
+
+      if (filtered.length === 0) {
+        container.innerHTML = '<p>No entries match your search.</p>';
+        return;
+      }
+
+      filtered.forEach(entry => {
+        const div = document.createElement('div');
+        div.className = 'entry';
+
+        const title = document.createElement('h3');
+        title.textContent = `Tracking: ${entry.trackingNumber}`;
+        div.appendChild(title);
+
+        // Sort most recent first
+        const sortedHistory = [...entry.history].sort((a, b) => {
+          return new Date(b.timestamp) - new Date(a.timestamp);
+        });
+
+        sortedHistory.forEach(h => {
+          const item = document.createElement('div');
+          item.className = 'history-item';
+
+          const status = createStatusTag(h.status);
+
+          item.appendChild(status);
+          item.innerHTML += `
+            <div class="location">${h.location}</div>
+            <div class="timestamp">${h.timestamp}</div>
+          `;
+
+          div.appendChild(item);
+        });
+
+        container.appendChild(div);
+      });
+    }
+
+    async function loadAllEntries() {
+      try {
+        const response = await fetch('http://192.168.16.91:5000/api/tracking');
+        const data = await response.json();
+
+        if (!Array.isArray(data)) throw new Error('Unexpected response');
+
+        allEntries = data;
+        renderEntries();
+      } catch (err) {
+        document.getElementById('error').textContent =
+          'Error loading entries: ' + err.message;
+      }
+    }
+
+    // Filter as you type
+    document.getElementById('search').addEventListener('input', (e) => {
+      renderEntries(e.target.value);
+    });
+
+    loadAllEntries();
+  </script>
+</body>
+</html>

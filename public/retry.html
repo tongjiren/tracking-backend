@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>TrackNow | Submit Tracking</title>
+  <style>
+    body {
+      background-color: #f0f4f8;
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 20px;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      flex-direction: column;
+    }
+    .header { text-align: center; margin-bottom: 20px; }
+    .header img { width: 60px; vertical-align: middle; }
+    .company-name { font-size: 24px; font-weight: bold; color: #1976d2; margin-left: 10px; vertical-align: middle; }
+    .form-box {
+      background: white; border-radius: 10px; padding: 30px;
+      max-width: 400px; width: 100%; box-shadow: 0 5px 15px rgba(0,0,0,0.1); margin: auto;
+    }
+    .form-box h2 { text-align: center; color: #1976d2; margin-bottom: 25px; }
+    label { display: block; margin-bottom: 6px; font-weight: bold; color: #333; }
+    input, select { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px; margin-bottom: 20px; font-size: 16px; }
+    .icon-prefix { margin-right: 6px; }
+    #custom-status-container { display: none; }
+    #custom-country-container { display: none; }
+    button {
+      width: 100%; background-color: #1976d2; color: white; padding: 12px;
+      border: none; border-radius: 6px; font-size: 16px; font-weight: bold;
+      cursor: pointer; margin-bottom: 10px; transition: background-color 0.2s ease;
+    }
+    button:hover { background-color: #135ba1; }
+    .secondary-btn { background-color: #ccc; color: #333; }
+    #response {
+      margin-top: 15px; text-align: center; font-weight: bold; color: #444;
+      min-height: 24px;
+    }
+    .image-banner { text-align: center; margin-top: 20px; }
+    .image-banner img { max-width: 100%; border-radius: 10px; }
+    @media (max-width: 480px) {
+      body { padding: 10px; }
+      .form-box { padding: 20px; }
+      input, button, select { font-size: 15px; }
+      .company-name { font-size: 20px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <img src="logo.png" alt="Logo">
+    <span class="company-name">00235 Cargo</span>
+  </div>
+
+  <div class="form-box">
+    <h2>📦 Submit Tracking Info</h2>
+
+    <label for="tracking">Tracking Number</label>
+    <input type="text" id="tracking" placeholder="e.g. ABC123" />
+
+    <label for="status">Status</label>
+    <select id="status" onchange="toggleCustomStatus()">
+      <option value="">-- Select Status --</option>
+      <option value="Processing">🛠️ Processing</option>
+      <option value="Shipped">📦 Shipped</option>
+      <option value="In Transit">🚚 In Transit</option>
+      <option value="Out for Delivery">🏠 Out for Delivery</option>
+      <option value="Delivered">✅ Delivered</option>
+      <option value="Delayed">⏳ Delayed</option>
+      <option value="Returned">↩️ Returned</option>
+      <option value="Other">🔧 Other</option>
+    </select>
+
+    <div id="custom-status-container">
+      <label for="custom-status">Specify Custom Status</label>
+      <input type="text" id="custom-status" placeholder="e.g. Held at Customs" />
+    </div>
+<label for="country">Country</label>
+<select id="country">
+  <option value="">-- Select Country --</option>
+  <option value="🇦🇫 Afghanistan">🇦🇫 Afghanistan</option>
+  <option value="🇦🇱 Albania">🇦🇱 Albania</option>
+  <option value="🇩🇿 Algeria">🇩🇿 Algeria</option>
+  <option value="🇦🇸 American Samoa">🇦🇸 American Samoa</option>
+  <option value="🇦🇩 Andorra">🇦🇩 Andorra</option>
+  <option value="🇦🇴 Angola">🇦🇴 Angola</option>
+  <option value="🇦🇮 Anguilla">🇦🇮 Anguilla</option>
+  <option value="🇦🇶 Antarctica">🇦🇶 Antarctica</option>
+  <option value="🇦🇬 Antigua & Barbuda">🇦🇬 Antigua & Barbuda</option>
+  <option value="🇦🇷 Argentina">🇦🇷 Argentina</option>
+  <option value="🇦🇲 Armenia">🇦🇲 Armenia</option>
+  <option value="🇦🇼 Aruba">🇦🇼 Aruba</option>
+  <option value="🇦🇺 Australia">🇦🇺 Australia</option>
+  <option value="🇦🇹 Austria">🇦🇹 Austria</option>
+  <option value="🇦🇿 Azerbaijan">🇦🇿 Azerbaijan</option>
+  <option value="🇧🇸 Bahamas">🇧🇸 Bahamas</option>
+  <option value="🇧🇭 Bahrain">🇧🇭 Bahrain</option>
+  <option value="🇧🇩 Bangladesh">🇧🇩 Bangladesh</option>
+  <option value="🇧🇧 Barbados">🇧🇧 Barbados</option>
+  <option value="🇧🇾 Belarus">🇧🇾 Belarus</option>
+  <option value="🇧🇪 Belgium">🇧🇪 Belgium</option>
+  <option value="🇧🇿 Belize">🇧🇿 Belize</option>
+  <option value="🇧🇯 Benin">🇧🇯 Benin</option>
+  <option value="🇧🇲 Bermuda">🇧🇲 Bermuda</option>
+  <option value="🇧🇹 Bhutan">🇧🇹 Bhutan</option>
+  <option value="🇧🇴 Bolivia">🇧🇴 Bolivia</option>
+  <option value="🇧🇦 Bosnia & Herzegovina">🇧🇦 Bosnia & Herzegovina</option>
+  <option value="🇧🇼 Botswana">🇧🇼 Botswana</option>
+  <option value="🇧🇷 Brazil">🇧🇷 Brazil</option>
+  <option value="🇧🇳 Brunei">🇧🇳 Brunei</option>
+  <option value="🇧🇬 Bulgaria">🇧🇬 Bulgaria</option>
+  <option value="🇧🇫 Burkina Faso">🇧🇫 Burkina Faso</option>
+  <option value="🇧🇮 Burundi">🇧🇮 Burundi</option>
+  <option value="🇰🇭 Cambodia">🇰🇭 Cambodia</option>
+  <option value="🇨🇲 Cameroon">🇨🇲 Cameroon</option>
+  <option value="🇨🇦 Canada">🇨🇦 Canada</option>
+  <option value="🇨🇻 Cape Verde">🇨🇻 Cape Verde</option>
+  <option value="🇰🇾 Cayman Islands">🇰🇾 Cayman Islands</option>
+  <option value="🇨🇫 Central African Republic">🇨🇫 Central African Republic</option>
+  <option value="🇹🇩 Chad">🇹🇩 Chad</option>
+  <option value="🇨🇱 Chile">🇨🇱 Chile</option>
+  <option value="🇨🇳 China">🇨🇳 China</option>
+  <option value="🇨🇴 Colombia">🇨🇴 Colombia</option>
+  <option value="🇰🇲 Comoros">🇰🇲 Comoros</option>
+  <option value="🇨🇬 Congo - Brazzaville">🇨🇬 Congo - Brazzaville</option>
+  <option value="🇨🇩 Congo - Kinshasa">🇨🇩 Congo - Kinshasa</option>
+  <option value="🇨🇰 Cook Islands">🇨🇰 Cook Islands</option>
+  <option value="🇨🇷 Costa Rica">🇨🇷 Costa Rica</option>
+  <option value="🇭🇷 Croatia">🇭🇷 Croatia</option>
+  <option value="🇨🇺 Cuba">🇨🇺 Cuba</option>
+  <option value="🇨🇾 Cyprus">🇨🇾 Cyprus</option>
+  <option value="🇨🇿 Czechia">🇨🇿 Czechia</option>
+  <option value="🇩🇰 Denmark">🇩🇰 Denmark</option>
+  <option value="🇩🇯 Djibouti">🇩🇯 Djibouti</option>
+  <option value="🇩🇲 Dominica">🇩🇲 Dominica</option>
+  <option value="🇩🇴 Dominican Republic">🇩🇴 Dominican Republic</option>
+  <option value="🇪🇨 Ecuador">🇪🇨 Ecuador</option>
+  <option value="🇪🇬 Egypt">🇪🇬 Egypt</option>
+  <option value="🇸🇻 El Salvador">🇸🇻 El Salvador</option>
+  <option value="🇬🇶 Equatorial Guinea">🇬🇶 Equatorial Guinea</option>
+  <option value="🇪🇷 Eritrea">🇪🇷 Eritrea</option>
+  <option value="🇪🇪 Estonia">🇪🇪 Estonia</option>
+  <option value="🇪🇹 Ethiopia">🇪🇹 Ethiopia</option>
+  <option value="🇫🇯 Fiji">🇫🇯 Fiji</option>
+  <option value="🇫🇮 Finland">🇫🇮 Finland</option>
+  <option value="🇫🇷 France">🇫🇷 France</option>
+  <option value="🇬🇦 Gabon">🇬🇦 Gabon</option>
+  <option value="🇬🇲 Gambia">🇬🇲 Gambia</option>
+  <option value="🇬🇪 Georgia">🇬🇪 Georgia</option>
+  <option value="🇩🇪 Germany">🇩🇪 Germany</option>
+  <option value="🇬🇭 Ghana">🇬🇭 Ghana</option>
+  <option value="🇬🇷 Greece">🇬🇷 Greece</option>
+  <option value="🇬🇩 Grenada">🇬🇩 Grenada</option>
+  <option value="🇬🇺 Guam">🇬🇺 Guam</option>
+  <option value="🇬🇹 Guatemala">🇬🇹 Guatemala</option>
+  <option value="🇬🇳 Guinea">🇬🇳 Guinea</option>
+  <option value="🇬🇼 Guinea-Bissau">🇬🇼 Guinea-Bissau</option>
+  <option value="🇬🇾 Guyana">🇬🇾 Guyana</option>
+  <option value="🇭🇹 Haiti">🇭🇹 Haiti</option>
+  <option value="🇭🇳 Honduras">🇭🇳 Honduras</option>
+  <option value="🇭🇰 Hong Kong SAR China">🇭🇰 Hong Kong SAR China</option>
+  <option value="🇭🇺 Hungary">🇭🇺 Hungary</option>
+  <option value="🇮🇸 Iceland">🇮🇸 Iceland</option>
+  <option value="🇮🇳 India">🇮🇳 India</option>
+  <option value="🇮🇩 Indonesia">🇮🇩 Indonesia</option>
+  <option value="🇮🇷 Iran">🇮🇷 Iran</option>
+  <option value="🇮🇶 Iraq">🇮🇶 Iraq</option>
+  <option value="🇮🇪 Ireland">🇮🇪 Ireland</option>
+  <option value="🇮🇱 Israel">🇮🇱 Israel</option>
+  <option value="🇮🇹 Italy">🇮🇹 Italy</option>
+  <option value="🇯🇲 Jamaica">🇯🇲 Jamaica</option>
+  <option value="🇯🇵 Japan">🇯🇵 Japan</option>
+  <option value="🇯🇴 Jordan">🇯🇴 Jordan</option>
+  <option value="🇰🇿 Kazakhstan">🇰🇿 Kazakhstan</option>
+  <option value="🇰🇪 Kenya">🇰🇪 Kenya</option>
+  <option value="🇰🇮 Kiribati">🇰🇮 Kiribati</option>
+  <option value="🇰🇼 Kuwait">🇰🇼 Kuwait</option>
+  <option value="🇰🇬 Kyrgyzstan">🇰🇬 Kyrgyzstan</option>
+  <option value="🇱🇦 Laos">🇱🇦 Laos</option>
+  <option value="🇱🇻 Latvia">🇱🇻 Latvia</option>
+  <option value="🇱🇧 Lebanon">🇱🇧 Lebanon</option>
+  <option value="🇱🇸 Lesotho">🇱🇸 Lesotho</option>
+  <option value="🇱🇷 Liberia">🇱🇷 Liberia</option>
+  <option value="🇱🇾 Libya">🇱🇾 Libya</option>
+  <option value="🇱🇮 Liechtenstein">🇱🇮 Liechtenstein</option>
+  <option value="🇱🇹 Lithuania">🇱🇹 Lithuania</option>
+  <option value="🇱🇺 Luxembourg">🇱🇺 Luxembourg</option>
+  <option value="🇲🇴 Macau SAR China">🇲🇴 Macau SAR China</option>
+  <option value="🇲🇰 Macedonia">🇲🇰 Macedonia</option>
+  <option value="🇲🇬 Madagascar">🇲🇬 Madagascar</option>
+  <option value="🇲🇼 Malawi">🇲🇼 Malawi</option>
+  <option value="🇲🇾 Malaysia">🇲🇾 Malaysia</option>
+  <option value="🇲🇻 Maldives">🇲🇻 Maldives</option>
+  <option value="🇲🇱 Mali">🇲🇱 Mali</option>
+  <option value="🇲🇹 Malta">🇲🇹 Malta</option>
+  <option value="🇲🇭 Marshall Islands">🇲🇭 Marshall Islands</option>
+  <option value="🇲🇶 Martinique">🇲🇶 Martinique</option>
+  <option value="🇲🇷 Mauritania">🇲🇷 Mauritania</option>
+  <option value="🇲🇺 Mauritius">🇲🇺 Mauritius</option>
+  <option value="🇾🇹 Mayotte">🇾🇹 Mayotte</option>
+  <option value="🇲🇽 Mexico">🇲🇽 Mexico</option>
+  <option value="🇫🇲 Micronesia">🇫🇲 Micronesia</option>
+  <option value="🇲🇩 Moldova">🇲🇩 Moldova</option>
+  <option value="🇲🇨 Monaco">🇲🇨 Monaco</option>
+  <option value="🇲🇳 Mongolia">🇲🇳 Mongolia</option>
+  <option value="🇲🇪 Montenegro">🇲🇪 Montenegro</option>
+  <option value="🇲🇸 Montserrat">🇲🇸 Montserrat</option>
+  <option value="🇲🇦 Morocco">🇲🇦 Morocco</option>
+  <option value="🇲🇿 Mozambique">🇲🇿 Mozambique</option>
+  <option value="🇲🇲 Myanmar (Burma)">🇲🇲 Myanmar (Burma)</option>
+  <option value="🇳🇦 Namibia">🇳🇦 Namibia</option>
+  <option value="🇳🇷 Nauru">🇳🇷 Nauru</option>
+  <option value="🇳🇵 Nepal">🇳🇵 Nepal</option>
+  <option value="🇳🇱 Netherlands">🇳🇱 Netherlands</option>
+  <option value="🇳🇨 New Caledonia">🇳🇨 New Caledonia</option>
+  <option value="🇳🇿 New Zealand">🇳🇿 New Zealand</option>
+  <option value="🇳🇮 Nicaragua">🇳🇮 Nicaragua</option>
+  <option value="🇳🇪 Niger">🇳🇪 Niger</option>
+  <option value="🇳🇬 Nigeria">🇳🇬 Nigeria</option>
+  <option value="🇳🇺 Niue">🇳🇺 Niue</option>
+  <option value="🇳🇫 Norfolk Island">🇳🇫 Norfolk Island</option>
+  <option value="🇰🇵 North Korea">🇰🇵 North Korea</option>
+  <option value="🇲🇵 Northern Mariana Islands">🇲🇵 Northern Mariana Islands</option>
+  <option value="🇳🇴 Norway">🇳🇴 Norway</option>
+  <option value="🇴🇲 Oman">🇴🇲 Oman</option>
+  <option value="🇵🇰 Pakistan">🇵🇰 Pakistan</option>
+  <option value="🇵🇼 Palau">🇵🇼 Palau</option>
+  <option value="🇵🇸 Palestinian Territories">🇵🇸 Palestinian Territories</option>
+  <option value="🇵🇦 Panama">🇵🇦 Panama</option>
+  <option value="🇵🇬 Papua New Guinea">🇵🇬 Papua New Guinea</option>
+  <option value="🇵🇾 Paraguay">🇵🇾 Paraguay</option>
+  <option value="🇵🇪 Peru">🇵🇪 Peru</option>
+  <option value="🇵🇭 Philippines">🇵🇭 Philippines</option>
+  <option value="🇵🇱 Poland">🇵🇱 Poland</option>
+  <option value="🇵🇹 Portugal">🇵🇹 Portugal</option>
+  <option value="🇵🇷 Puerto Rico">🇵🇷 Puerto Rico</option>
+  <option value="🇶🇦 Qatar">🇶🇦 Qatar</option>
+  <option value="🇷🇪 Réunion">🇷🇪 Réunion</option>
+  <option value="🇷🇴 Romania">🇷🇴 Romania</option>
+  <option value="🇷🇺 Russia">🇷🇺 Russia</option>
+  <option value="🇷🇼 Rwanda">🇷🇼 Rwanda</option>
+  <option value="🇼🇸 Samoa">🇼🇸 Samoa</option>
+  <option value="🇸🇲 San Marino">🇸🇲 San Marino</option>
+  <option value="🇸🇦 Saudi Arabia">🇸🇦 Saudi Arabia</option>
+  <option value="🇸🇳 Senegal">🇸🇳 Senegal</option>
+  <option value="🇷🇸 Serbia">🇷🇸 Serbia</option>
+  <option value="🇸🇨 Seychelles">🇸🇨 Seychelles</option>
+  <option value="🇸🇱 Sierra Leone">🇸🇱 Sierra Leone</option>
+  <option value="🇸🇬 Singapore">🇸🇬 Singapore</option>
+  <option value="🇸🇽 Sint Maarten">🇸🇽 Sint Maarten</option>
+  <option value="🇸🇰 Slovakia">🇸🇰 Slovakia</option>
+  <option value="🇸🇮 Slovenia">🇸🇮 Slovenia</option>
+  <option value="🇸🇧 Solomon Islands">🇸🇧 Solomon Islands</option>
+  <option value="🇸🇴 Somalia">🇸🇴 Somalia</option>
+  <option value="🇿🇦 South Africa">🇿🇦 South Africa</option>
+  <option value="🇰🇷 South Korea">🇰🇷 South Korea</option>
+  <option value="🇸🇸 South Sudan">🇸🇸 South Sudan</option>
+  <option value="🇪🇸 Spain">🇪🇸 Spain</option>
+  <option value="🇱🇰 Sri Lanka">🇱🇰 Sri Lanka</option>
+  <option value="🇧🇱 St. Barthélemy">🇧🇱 St. Barthélemy</option>
+  <option value="🇸🇭 St. Helena">🇸🇭 St. Helena</option>
+  <option value="🇰🇳 St. Kitts & Nevis">🇰🇳 St. Kitts & Nevis</option>
+  <option value="🇱🇨 St. Lucia">🇱🇨 St. Lucia</option>
+  <option value="🇲🇫 St. Martin">🇲🇫 St. Martin</option>
+  <option value="🇵🇲 St. Pierre & Miquelon">🇵🇲 St. Pierre & Miquelon</option>
+  <option value="🇻🇨 St. Vincent & Grenadines">🇻🇨 St. Vincent & Grenadines</option>
+  <option value="🇸🇩 Sudan">🇸🇩 Sudan</option>
+  <option value="🇸🇷 Suriname">🇸🇷 Suriname</option>
+  <option value="🇸🇯 Svalbard & Jan Mayen">🇸🇯 Svalbard & Jan Mayen</option>
+  <option value="🇸🇪 Sweden">🇸🇪 Sweden</option>
+  <option value="🇨🇭 Switzerland">🇨🇭 Switzerland</option>
+  <option value="🇸🇾 Syria">🇸🇾 Syria</option>
+  <option value="🇹🇼 Taiwan">🇹🇼 Taiwan</option>
+  <option value="🇹🇯 Tajikistan">🇹🇯 Tajikistan</option>
+  <option value="🇹🇿 Tanzania">🇹🇿 Tanzania</option>
+  <option value="🇹🇭 Thailand">🇹🇭 Thailand</option>
+  <option value="🇹🇱 Timor-Leste">🇹🇱 Timor-Leste</option>
+  <option value="🇹🇬 Togo">🇹🇬 Togo</option>
+  <option value="🇹🇰 Tokelau">🇹🇰 Tokelau</option>
+  <option value="🇹🇴 Tonga">🇹🇴 Tonga</option>
+  <option value="🇹🇹 Trinidad & Tobago">🇹🇹 Trinidad & Tobago</option>
+  <option value="🇹🇳 Tunisia">🇹🇳 Tunisia</option>
+  <option value="🇹🇷 Turkey">🇹🇷 Turkey</option>
+  <option value="🇹🇲 Turkmenistan">🇹🇲 Turkmenistan</option>
+  <option value="🇹🇨 Turks & Caicos Islands">🇹🇨 Turks & Caicos Islands</option>
+  <option value="🇹🇻 Tuvalu">🇹🇻 Tuvalu</option>
+  <option value="🇺🇬 Uganda">🇺🇬 Uganda</option>
+  <option value="🇺🇦 Ukraine">🇺🇦 Ukraine</option>
+  <option value="🇦🇪 United Arab Emirates">🇦🇪 United Arab Emirates</option>
+  <option value="🇬🇧 United Kingdom">🇬🇧 United Kingdom</option>
+  <option value="🇺🇸 United States">🇺🇸 United States</option>
+  <option value="🇺🇾 Uruguay">🇺🇾 Uruguay</option>
+  <option value="🇺🇿 Uzbekistan">🇺🇿 Uzbekistan</option>
+  <option value="🇻🇺 Vanuatu">🇻🇺 Vanuatu</option>
+  <option value="🇻🇦 Vatican City">🇻🇦 Vatican City</option>
+  <option value="🇻🇪 Venezuela">🇻🇪 Venezuela</option>
+  <option value="🇻🇳 Vietnam">🇻🇳 Vietnam</option>
+  <option value="🇼🇫 Wallis & Futuna">🇼🇫 Wallis & Futuna</option>
+  <option value="🇪🇭 Western Sahara">🇪🇭 Western Sahara</option>
+  <option value="🇾🇪 Yemen">🇾🇪 Yemen</option>
+  <option value="🇿🇲 Zambia">🇿🇲 Zambia</option>
+  <option value="🇿🇼 Zimbabwe">🇿🇼 Zimbabwe</option>
+  <option value="Other">🌍 Other</option>
+</select>
+<div id="custom-country-container">
+      <label for="custom-country">Please specify the country</label>
+      <input type="text" id="custom-country" placeholder="e.g. Country name" />
+    </div>
+
+    <label for="location">Location</label>
+    <input type="text" id="location" placeholder="City" />
+
+    <label for="timestamp">Timestamp</label>
+    <input type="text" id="timestamp" />
+
+    <button onclick="submitTracking()">Submit</button>
+    <button class="secondary-btn" onclick="window.location.href='view-all.html'">View All Entries</button>
+
+    <p id="response"></p>
+  </div>
+
+  <div class="image-banner">
+    <img src="shipping1.jpg" alt="Delivery">
+  </div>
+
+  <audio id="success-sound" preload="auto">
+    <source src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_d5f5b1e027.mp3" type="audio/mp3">
+  </audio>
+
+  <script>
+    function toggleCustomStatus() {
+      const show = document.getElementById('status').value === 'Other';
+      document.getElementById('custom-status-container').style.display = show ? 'block' : 'none';
+    }
+  
+    function updateTimestamp() {
+      const now = new Date();
+      const formatted = now.toISOString().slice(0,19).replace('T',' ');
+      document.getElementById('timestamp').value = formatted;
+    }
+
+    window.addEventListener('load', updateTimestamp);
+
+    async function submitTracking() {
+      const tracking = document.getElementById('tracking').value.trim();
+      const statusSel = document.getElementById('status').value;
+      const status = statusSel === 'Other'
+        ? document.getElementById('custom-status').value.trim()
+        : statusSel;
+      const country = document.getElementById('country').value;
+      const location = document.getElementById('location').value.trim();
+      const timestamp = document.getElementById('timestamp').value.trim();
+      const responseEl = document.getElementById('response');
+      const successSound = document.getElementById('success-sound');
+
+      if (!tracking || !status || !location || !timestamp) {
+        responseEl.innerHTML = `<span class="icon">❗</span>Please fill all fields.`;
+        responseEl.style.color = 'red';
+        return;
+      }
+
+      const payload = {
+        trackingNumber: tracking,
+        history: [{ status, location: country + ' – ' + location, timestamp }]
+      };
+
+      try {
+        const res = await fetch('http://192.168.1.60:5000/api/tracking', {
+          method: 'POST',
+          headers: {'Content-Type':'application/json'},
+          body: JSON.stringify(payload)
+        });
+        const data = await res.json();
+        responseEl.innerHTML = `<span class="icon">✔️</span>${data.message || 'Saved!'}`;
+        responseEl.style.color = 'green';
+        successSound.play().catch(() => {});
+        document.getElementById('tracking').value = '';
+        document.getElementById('status').value = '';
+        document.getElementById('custom-status').value = '';
+        document.getElementById('country').value = '';
+        document.getElementById('location').value = '';
+        updateTimestamp();
+        setTimeout(()=> responseEl.textContent='',3000);
+      } catch (err) {
+        responseEl.innerHTML = `<span class="icon">❌</span>Error: ${err.message}`;
+        responseEl.style.color = 'red';
+        setTimeout(()=> responseEl.textContent='',5000);
+      }
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Track Package</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f2f5f8;
+      padding: 20px;
+      text-align: center;
+    }
+
+    .container {
+      background: #fff;
+      padding: 30px;
+      border-radius: 10px;
+      max-width: 500px;
+      margin: 0 auto;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+
+    input {
+      width: 100%;
+      padding: 12px;
+      font-size: 16px;
+      margin-bottom: 20px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+    }
+
+    button {
+      background-color: #1976d2;
+      color: #fff;
+      padding: 12px 20px;
+      border: none;
+      border-radius: 6px;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      width: 100%;
+    }
+
+    button:hover {
+      background-color: #135ba1;
+    }
+
+    .result {
+      margin-top: 20px;
+      text-align: left;
+    }
+
+    .entry {
+      background: #f9f9f9;
+      border-left: 4px solid #1976d2;
+      padding: 10px;
+      margin-bottom: 10px;
+      border-radius: 5px;
+    }
+
+    .entry strong {
+      display: block;
+      margin-bottom: 5px;
+    }
+
+    .error {
+      color: red;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>🔍 Track Your Package</h2>
+    <input type="text" id="track-input" placeholder="Enter Tracking Number (e.g. ABC123)" />
+    <button onclick="fetchTracking()">Check Status</button>
+
+    <div id="error" class="error"></div>
+    <div id="result" class="result"></div>
+  </div>
+
+  <script>
+    async function fetchTracking() {
+      const input = document.getElementById('track-input');
+      const trackingNumber = input.value.trim().toUpperCase();
+      const resultDiv = document.getElementById('result');
+      const errorDiv = document.getElementById('error');
+      resultDiv.innerHTML = '';
+      errorDiv.textContent = '';
+
+      if (!trackingNumber) {
+        errorDiv.textContent = 'Please enter a tracking number.';
+        return;
+      }
+
+      try {
+        const response = await fetch(`http://192.168.16.91:5000/api/tracking/${trackingNumber}`);
+        if (!response.ok) {
+          throw new Error('Tracking number not found');
+        }
+
+        const data = await response.json();
+        const history = data.history.slice().reverse(); // latest first
+
+        if (history.length === 0) {
+          resultDiv.innerHTML = '<p>No tracking history available.</p>';
+          return;
+        }
+
+        resultDiv.innerHTML = `<h3>Tracking Number: ${trackingNumber}</h3>`;
+        history.forEach(entry => {
+          resultDiv.innerHTML += `
+            <div class="entry">
+              <strong>Status:</strong> ${entry.status}<br/>
+              <strong>Location:</strong> ${entry.location}<br/>
+              <strong>Timestamp:</strong> ${entry.timestamp}
+            </div>
+          `;
+        });
+      } catch (err) {
+        errorDiv.textContent = err.message;
+      }
+    }
+  </script>
+</body>
+</html>

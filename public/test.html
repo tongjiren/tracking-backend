@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Tracking Data POST Test</title>
+</head>
+<body>
+  <h2>Submit Tracking Data</h2>
+  <form id="trackForm">
+    <label>Tracking Number: <input type="text" id="trackingNumber" value="AB123456789XY" /></label><br><br>
+    <label>History JSON:</label><br>
+    <textarea id="history" rows="10" cols="50">[
+  {
+    "status": "Order Received",
+    "location": "Store A",
+    "timestamp": "2025-07-20T10:00:00Z"
+  },
+  {
+    "status": "Shipped",
+    "location": "Warehouse",
+    "timestamp": "2025-07-20T13:00:00Z"
+  }
+]</textarea><br><br>
+    <button type="submit">Send POST</button>
+  </form>
+
+  <p id="response"></p>
+
+  <script>
+    const form = document.getElementById('trackForm');
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const trackingNumber = document.getElementById('trackingNumber').value;
+      const history = JSON.parse(document.getElementById('history').value);
+
+      try {
+        const res = await fetch('http://192.168.16.91:5000/api/tracking', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ trackingNumber, history }),
+        });
+
+        const data = await res.json();
+        document.getElementById('response').innerText = JSON.stringify(data, null, 2);
+      } catch (err) {
+        document.getElementById('response').innerText = '❌ Error submitting data';
+        console.error(err);
+      }
+    });
+  </script>
+</body>
+</html>

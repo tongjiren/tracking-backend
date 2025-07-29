@@ -1,0 +1,19 @@
+# Node modules
+node_modules/
+
+# dotenv environment file
+.env
+
+# Log files
+*.log
+
+# OS-specific
+.DS_Store
+
+# Temporary files
+*.tmp
+*.swp
+
+# Expo specific
+.expo/
+.expo-shared/
