@@ -33,7 +33,7 @@
       const history = JSON.parse(document.getElementById('history').value);
 
       try {
-        const res = await fetch('http://192.168.16.91:5000/api/tracking', {
+        const res = await fetch('https://tracking-backend-inbt.onrender.com/api/tracking', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ trackingNumber, history }),
