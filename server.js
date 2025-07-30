@@ -28,33 +28,20 @@ app.get('/', (req, res) => {
 
 // ✅ POST: Add or update tracking data
 app.post('/api/tracking', async (req, res) => {
-  const { trackingNumber, status, location, country, timestamp } = req.body;
-
-  if (!trackingNumber || !status || !location) {
-    return res.status(400).json({ error: 'Missing required fields' });
+  const { trackingNumber, history } = req.body;
+console.log('🟡 Received:', req.body);
+  if (!trackingNumber || !Array.isArray(history)) {
+    return res.status(400).json({ error: 'Invalid data' });
   }
 
-  const newEntry = {
-    status,
-    location: country ? `${country} – ${location}` : location,
-    timestamp: timestamp || new Date().toISOString()
-  };
-
   try {
-    let tracking = await Tracking.findOne({ trackingNumber });
+    const updated = await Tracking.findOneAndUpdate(
+      { trackingNumber: trackingNumber.toUpperCase() },
+      { history },
+      { upsert: true, new: true }
+    );
 
-    if (tracking) {
-      tracking.history.push(newEntry);
-      await tracking.save();
-    } else {
-      tracking = new Tracking({
-        trackingNumber,
-        history: [newEntry]
-      });
-      await tracking.save();
-    }
-
-    res.status(200).json({ message: 'Tracking updated', entry: tracking });
+    res.status(200).json({ message: 'Tracking data saved', entry: updated });
   } catch (err) {
     console.error('Error saving tracking data:', err);
     res.status(500).json({ error: 'Server error' });
