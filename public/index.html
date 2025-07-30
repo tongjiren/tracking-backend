@@ -329,7 +329,7 @@
   </div>
 
   <audio id="success-sound" preload="auto">
-    <source src="http://cdn.pixabay.com/download/audio/2022/03/15/audio_d5f5b1e027.mp3" type="audio/mp3">
+    <source src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_d5f5b1e027.mp3" type="audio/mp3">
   </audio>
 
   <script>
@@ -370,7 +370,7 @@
       };
 
       try {
-        const res = await fetch('http://192.168.16.91:5000/api/tracking', {
+        const res = await fetch('https://tracking-backend-inbt.onrender.com/api/tracking', {
           method: 'POST',
           headers: {'Content-Type':'application/json'},
           body: JSON.stringify(payload)
