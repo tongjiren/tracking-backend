@@ -76,6 +76,11 @@
     <input type="text" id="track-input" placeholder="Enter Tracking Number (e.g. ABC123)" />
     <button onclick="fetchTracking()">Check Status</button>
 
+    <hr style="margin: 30px 0;" />
+    <h2>➕ Add New Tracking Entry</h2>
+    <input type="text" id="add-track-num" placeholder="Tracking Number (e.g. XYZ999)" />
+    <textarea id="add-history" rows="6" placeholder='Enter history as JSON (e.g. [{"status":"Shipped","location":"NY","timestamp":"2025-07-29"}])' style="width: 100%; margin: 10px 0;"></textarea>
+    <button onclick="addTracking()">Add Tracking Entry</button>
     <div id="error" class="error"></div>
     <div id="result" class="result"></div>
   </div>
@@ -95,7 +100,7 @@
       }
 
       try {
-        const response = await fetch(`https://tracking-backend-inbt.onrender.com/api/tracking/${trackingNumber}`);
+        const response = await fetch(`http://localhost:5000/api/tracking/${trackingNumber}`);
         if (!response.ok) {
           throw new Error('Tracking number not found');
         }
@@ -123,5 +128,44 @@
       }
     }
   </script>
+<script>
+  async function addTracking() {
+    const trackingNumber = document.getElementById('add-track-num').value.trim().toUpperCase();
+    const historyInput = document.getElementById('add-history').value.trim();
+    const errorDiv = document.getElementById('error');
+    errorDiv.textContent = '';
+
+    if (!trackingNumber || !historyInput) {
+      errorDiv.textContent = 'Tracking number and history are required.';
+      return;
+    }
+
+    let history;
+    try {
+      history = JSON.parse(historyInput);
+      if (!Array.isArray(history)) throw new Error();
+    } catch {
+      errorDiv.textContent = 'Invalid JSON format for history.';
+      return;
+    }
+
+    try {
+      const response = await fetch('http://localhost:5000/api/tracking', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ trackingNumber, history })
+      });
+
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.error || 'Failed to save tracking');
+      }
+
+      alert('✅ Tracking entry added successfully!');
+    } catch (err) {
+      errorDiv.textContent = err.message;
+    }
+  }
+</script>
 </body>
 </html>

@@ -368,7 +368,7 @@
       };
 
       try {
-        const res = await fetch('https://tracking-backend-inbt.onrender.com/api/tracking', {
+        const res = await fetch('http://localhost:5000/api/tracking', {
           method: 'POST',
           headers: {'Content-Type':'application/json'},
           body: JSON.stringify(payload)
