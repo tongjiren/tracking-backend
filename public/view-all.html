@@ -107,12 +107,14 @@
   <script>
     let allEntries = [];
 
-    function createStatusTag(status) {
-      const span = document.createElement('span');
-      span.className = `status-tag ${status.replace(/\s+/g, '') || 'Unknown'}`;
-      span.textContent = status || 'Unknown';
-      return span;
-    }
+ function createStatusTag(status) {
+  const safeStatus = status || 'Unknown';
+  const span = document.createElement('span');
+  span.className = `status-tag ${safeStatus.replace(/\s+/g, '')}`;
+  span.textContent = safeStatus;
+  return span;
+}
+
 
     function renderEntries(filterText = '') {
       const container = document.getElementById('entries');
