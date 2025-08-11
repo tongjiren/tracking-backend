@@ -2,7 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
-const path = require('path'); // ✅ Needed for static file serving
+const path = require('path');
 require('dotenv').config();
 
 const app = express();
@@ -26,10 +26,11 @@ app.get('/', (req, res) => {
   res.send('🚀 Tracking Backend is running!');
 });
 
-// ✅ POST: Add or update tracking data
+// ✅ POST: Add or update tracking data (append to history instead of overwrite)
 app.post('/api/tracking', async (req, res) => {
   const { trackingNumber, history } = req.body;
-console.log('🟡 Received:', req.body);
+  console.log('🟡 Received:', req.body);
+
   if (!trackingNumber || !Array.isArray(history)) {
     return res.status(400).json({ error: 'Invalid data' });
   }
@@ -37,7 +38,7 @@ console.log('🟡 Received:', req.body);
   try {
     const updated = await Tracking.findOneAndUpdate(
       { trackingNumber: trackingNumber.toUpperCase() },
-      { history },
+      { $push: { history: { $each: history } } }, // ✅ Append entries instead of replacing
       { upsert: true, new: true }
     );
 
@@ -86,12 +87,11 @@ mongoose.connect(process.env.MONGO_URI, {
 })
 .then(() => {
   console.log('✅ Connected to MongoDB Atlas');
-   app.listen(5000, '0.0.0.0', () => {
-  console.log('✅ Server running at http://localhost:5000');
-});
-
-
+  app.listen(PORT, '0.0.0.0', () => {
+    console.log(`✅ Server running at http://localhost:${PORT}`);
+  });
 })
 .catch(err => {
   console.error('❌ MongoDB connection error:', err);
 });
+n
